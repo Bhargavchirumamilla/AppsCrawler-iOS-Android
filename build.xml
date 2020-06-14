@@ -1,0 +1,74 @@
+	<project name="AppsCrawler" default="compile" basedir=".">
+
+
+	<property name="projectName" value="AppsCrawler"/>
+	<property name="src.dir" location="src"/>
+	<property name="build.dir" location="bin"/>
+	<property name="dist.dir" location="dist"/>
+	<property name="dist.lib.dir" location="dist/lib"/>
+	<property name="lib.dir" value="lib" />
+	<property name="srclib.dir" value="lib" />
+	<property name="logs.dir" value="logs"/>
+	<property name="native.lib" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/jre/lib"></property>
+	<property name="main" value="com.landmarkgroup.appscrawler.AppsCrawler"/>
+
+
+
+		<target name="clean" description="clean up">
+			<delete includeemptydirs="true">
+			    <fileset dir ="${logs.dir}"/>
+		 </delete>
+				<delete dir="${build.dir}" />
+
+		</target>
+
+
+		<target name="init" depends="clean">
+				<!-- Create the time stamp -->
+				<tstamp />
+				<!-- Create the build directory structure used by compile -->
+				<mkdir dir="${build.dir}" />
+		</target>
+
+		<!-- To work with external libraries, need classpath to compile -->
+		<target name="compile" depends="init" description="compile the source ">
+			<copy file="${src.dir}/log4j2.xml" todir="${build.dir}"/>
+
+
+			<javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" classpathref="classpath" >
+			</javac>
+
+		</target>
+
+		<target name="dist" depends="compile"
+		         description="generate the distribution" >
+			</target>
+
+		<path id="classpath">
+		    <fileset dir="${dist.lib.dir}">
+		    	 <include name="**/*.class" />
+		        <include name="**/*.jar" />
+		    </fileset>
+		    <pathelement location="${build.dir}" />
+			<pathelement location="${native.lib}/**/*.jar"/>
+		</path>
+
+		<target name="main" depends="clean,compile" >
+			 <java classname="${main}">
+			<classpath refid="classpath">
+			</classpath>
+		    </java>
+		</target>
+
+
+		<target name="jar" depends="main">
+
+		    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${build.dir}">
+		        <manifest>
+		        	 <attribute name="Main-Class" value="${main}"/>
+		        </manifest>
+		    </jar>
+		</target>
+
+
+</project>

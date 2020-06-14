@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="AppsCrawler"
+               packages="org.apache.logging.log4j.test">
+<Properties>
+<Property name="log-path">logs</Property>
+</Properties>
+<Filter type="ThresholdFilter" level="info"/>
+
+<Appenders>
+<Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+</Console>
+
+
+<File name="trace-log" fileName="${log-path}/Trace.log" append="true"
+filePattern="$log-path}/App-%d{yyyy-MM-dd}.log">
+<PatternLayout>
+<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+</PatternLayout>
+<Policies>
+<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+</Policies>
+</File>
+
+<File name="error-log" fileName="${log-path}/Error.log" append="true"
+filePattern="${log-path}/Error-%d{yyyy-MM-dd}.log">
+<PatternLayout>
+<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+</PatternLayout>
+<Policies>
+<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+</Policies>
+</File>
+</Appenders>
+
+<Loggers>
+<Root level="info" additivity="true">
+<appender-ref ref="trace-log" level="info"/>
+<appender-ref ref="error-log" level="error"/>
+<appender-ref ref="Console"  level="info"/>
+<appender-ref ref="Console" level="error"/>
+</Root>
+</Loggers>
+</Configuration>
